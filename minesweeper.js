@@ -19,8 +19,8 @@ var board = {
 
 // Defining Complexity
 var levelEasy = 9;
-var levelMedium = 16;
-var levelHard = 25;
+// var levelMedium = 16;
+// var levelHard = 25;
 // Default Complexity
 var numCells = levelEasy;
 
