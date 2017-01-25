@@ -133,12 +133,14 @@ function detectStatus () {
   if (gameStatus === "<p>You win!</p>") {
     console.log("Detected Win");
     var winFX = new Audio ('sounds/win.mp3');
+    winFX.volume = 0.4
     winFX.play();
     setTimeout(resetGame, 3000);
   }
   else if (gameStatus === "<p>BOOM!</p>") {
     console.log("Detected Loss");
     var lossFX = new Audio ('sounds/loss.mp3');
+    lossFX.volume = 0.4
     lossFX.play();
     setTimeout(resetGame, 3000);
   }
