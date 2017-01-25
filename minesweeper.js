@@ -1,3 +1,16 @@
+// This game can get a little loud, prompt user to turn down volume
+checkVolume();
+var volumeChecked = confirm("This game can get a little loud so please ensure you turn your volume down :)")
+
+function checkVolume() {
+  if (volumeChecked === false) {
+    volumeChecked = confirm("This game can get a little loud so please ensure you turn your volume down :)")
+  }
+  else {
+    return
+  }
+}
+
 document.addEventListener('DOMContentLoaded', startGame)
 
 // document.getElementById('newGame').addEventListener('click', resetBoard)
@@ -69,6 +82,7 @@ function generateMines() {
 // Start new game
 
 function startGame () {
+  // inform user to turn volume down
   //loop through each cell
   for (var i = 0; i < board.cells.length; i++) {
     // call countSurroundingMines on cell which returns the count of surrounding Mines to the surroundingMines property value
@@ -133,24 +147,26 @@ function detectStatus () {
   if (gameStatus === "<p>You win!</p>") {
     console.log("Detected Win");
     var winFX = new Audio ('sounds/win.mp3');
-    winFX.volume = 0.4
+    winFX.volume = 0.1;
     winFX.play();
     setTimeout(resetGame, 3000);
   }
   else if (gameStatus === "<p>BOOM!</p>") {
     console.log("Detected Loss");
     var lossFX = new Audio ('sounds/loss.mp3');
-    lossFX.volume = 0.4
+    lossFX.volume = 0.1;
     lossFX.play();
     setTimeout(resetGame, 3000);
   }
   else if (event.target.classList.contains('marked')){
     console.log(event.target);
     var revealFX = new Audio ('sounds/reveal.mp3');
+    revelFX.volume = 0.1;
     revealFX.play();
   }
   else {
     var clickFX = new Audio ('sounds/snap.mp3');
+    clickFX.volume = 0.1;
     clickFX.play();
   }
 }
