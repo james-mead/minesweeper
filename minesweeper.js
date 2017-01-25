@@ -48,8 +48,8 @@ function createBoard (numCells) {
   for (i = 0; i < Math.sqrt(numCells); i++) {
     // loop through columns
     for (j = 0; j < Math.sqrt(numCells); j++) {
-      console.log('looping through row: ' + i + ' and column: ' + j + ' to set value')
       // set the property values of each cell
+      console.log('looping through row: ' + i + ' and column: ' + j + ' to set value')
       var cellValue = {row: i, col: j, isMine: false, isMarked: false, hidden: true};
       // push the value to the 'board.cells' array
       board.cells.push(cellValue)
@@ -91,6 +91,7 @@ function startGame () {
     document.addEventListener('contextmenu', checkForWin)
     document.addEventListener('click', detectStatus)
     document.addEventListener('contextmenu', detectStatus)
+    document.addEventListener('click', resetGame)
   }
   lib.initBoard()
 }
@@ -143,62 +144,54 @@ function countSurroundingMines (cell) {
 
 // Determine win or lose
 function detectStatus () {
-  var gameStatus = document.getElementById('message').innerHTML;
-  if (gameStatus === "<p>You win!</p>") {
-    console.log("Detected Win");
-    var winFX = new Audio ('sounds/win.mp3');
-    winFX.volume = 0.1;
-    winFX.play();
-    setTimeout(resetGame, 3000);
-  }
-  else if (gameStatus === "<p>BOOM!</p>") {
-    console.log("Detected Loss");
-    var lossFX = new Audio ('sounds/loss.mp3');
-    lossFX.volume = 0.1;
-    lossFX.play();
-    setTimeout(resetGame, 3000);
-  }
-  else if (event.target.classList.contains('marked')){
-    console.log(event.target);
-    var revealFX = new Audio ('sounds/reveal.mp3');
-    revelFX.volume = 0.1;
-    revealFX.play();
-  }
-  else {
-    var clickFX = new Audio ('sounds/snap.mp3');
-    clickFX.volume = 0.1;
-    clickFX.play();
+var gameStatus = document.getElementById('message').innerHTML;
+if (event.target.parentNode.className === 'board') {
+    if (gameStatus === "<p>You win!</p>") {
+        console.log("Detected Win");
+        var winFX = new Audio('sounds/win.mp3');
+        winFX.volume = 0.1;
+        winFX.play();
+        addResetButton();
+        setTimeout(resetGame, 3000);
+    } else if (gameStatus === "<p>BOOM!</p>") {
+        console.log("Detected Loss");
+        var lossFX = new Audio('sounds/loss.mp3');
+        lossFX.volume = 0.1;
+        lossFX.play();
+        addResetButton();
+        setTimeout(resetGame, 3000);
+    } else if (event.target.classList.contains('marked')) {
+        var revealFX = new Audio('sounds/reveal.mp3');
+        revealFX.volume = 0.1;
+        revealFX.play();
+    } else {
+        var clickFX = new Audio('sounds/snap.mp3');
+        clickFX.volume = 0.1;
+        clickFX.play();
+    }
   }
 }
 
 // Reset game
+
+function addResetButton () {
+  //Create reset button
+  var btn = document.createElement("BUTTON");
+  var btnText = document.createTextNode("Click to play again");
+  btn.setAttribute('id', 'resetButton')
+  document.body.appendChild(btn);
+  btn.appendChild(btnText);
+}
+
 function resetGame () {
-  var playAgain = prompt('Would you like to play again? Type \'YES\' or \'NO\'');
-  if (playAgain.toUpperCase() === "YES") {
+  if (event.target.id === 'resetButton') {
     console.log('Resetting Game');
+    //remove button
+    event.target.remove();
+    //remove and reset board
     var board = document.getElementsByClassName('board')[0];
     board.innerHTML = '';
     createBoard(numCells);
     startGame();
-    // location.reload()
-  }
-  else if (playAgain.toUpperCase() === "NO") {
-    setTimeout(close, 2000)
-    // close()
-  }
-  else if (playAgain.toUpperCase() !== "NO" || playAgain.toUpperCase() !== "YES") {
-    var playAgain = prompt('Sorry, you did not type it correctly. Would you like to play again? Type \'YES\' or \'NO\''); {
-      if (playAgain.toUpperCase() === "YES") {
-        console.log('Resetting Game');
-        var board = document.getElementsByClassName('board')[0];
-        board.innerHTML = '';
-        createBoard(numCells);
-        startGame();
-      }
-      else if (playAgain.toUpperCase() === "NO") {
-        setTimeout(close, 2000)
-        // close()
-      }
-    }
   }
 }
